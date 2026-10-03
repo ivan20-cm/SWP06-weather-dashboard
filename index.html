@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="使用 Open-Meteo API 製作的高雄七日天氣資訊看板" />
+  <title>高雄天氣資訊看板｜SWP06</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">SWP06 · Weather Dashboard</p>
+        <h1>高雄天氣資訊看板</h1>
+        <p class="subtitle">即時掌握高雄目前天氣與未來 7 日溫度趨勢</p>
+      </div>
+      <div class="location-badge" aria-label="目前地點：高雄市">
+        <span aria-hidden="true">📍</span>
+        <span>高雄市</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- 載入中 / 錯誤訊息區：使用 aria-live 讓狀態更新更容易被輔助工具讀取 -->
+      <section id="statusPanel" class="status-panel" aria-live="polite">
+        <div class="spinner" aria-hidden="true"></div>
+        <p id="statusMessage">正在取得天氣資料...</p>
+        <button id="retryButton" class="retry-button" type="button" hidden>重新載入</button>
+      </section>
+
+      <!-- 成功取得 API 資料後才顯示內容 -->
+      <div id="dashboardContent" hidden>
+        <section class="section-block" aria-labelledby="currentWeatherTitle">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">CURRENT WEATHER</p>
+              <h2 id="currentWeatherTitle">目前天氣</h2>
+            </div>
+            <p id="weatherTime" class="update-time">--</p>
+          </div>
+
+          <div class="current-grid">
+            <article class="main-weather-card">
+              <div class="weather-summary">
+                <div id="currentWeatherIcon" class="weather-icon" aria-hidden="true">☀️</div>
+                <div>
+                  <p id="currentWeatherText" class="weather-condition">--</p>
+                  <p class="temperature-row">
+                    <span id="currentTemperature" class="main-temperature">--</span>
+                    <span class="temperature-unit">°C</span>
+                  </p>
+                </div>
+              </div>
+              <p class="card-note">高雄市中心座標約 22.63°N, 120.30°E</p>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-icon" aria-hidden="true">🌡️</span>
+              <p class="metric-label">體感溫度</p>
+              <p class="metric-value"><span id="apparentTemperature">--</span><span> °C</span></p>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-icon" aria-hidden="true">💧</span>
+              <p class="metric-label">相對濕度</p>
+              <p class="metric-value"><span id="relativeHumidity">--</span><span> %</span></p>
+            </article>
+
+            <article class="metric-card">
+              <span class="metric-icon" aria-hidden="true">💨</span>
+              <p class="metric-label">風速</p>
+              <p class="metric-value"><span id="windSpeed">--</span><span> km/h</span></p>
+            </article>
+          </div>
+        </section>
+
+        <section class="section-block" aria-labelledby="forecastTitle">
+          <div class="section-heading">
+            <div>
+              <p class="section-kicker">7-DAY FORECAST</p>
+              <h2 id="forecastTitle">未來七天天氣預報</h2>
+            </div>
+          </div>
+
+          <div id="forecastGrid" class="forecast-grid"></div>
+        </section>
+
+        <section class="section-block" aria-labelledby="chartTitle">
+          <div class="section-heading chart-heading">
+            <div>
+              <p class="section-kicker">TEMPERATURE TREND</p>
+              <h2 id="chartTitle">七日溫度趨勢</h2>
+            </div>
+            <div class="chart-legend" aria-label="圖表圖例">
+              <span><i class="legend-line legend-high"></i>最高溫</span>
+              <span><i class="legend-line legend-low"></i>最低溫</span>
+            </div>
+          </div>
+
+          <div class="chart-card">
+            <canvas id="temperatureChart" role="img" aria-label="高雄未來七日最高溫與最低溫折線圖"></canvas>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="footer">
+      <div>
+        <p>資料來源：
+          <a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Open-Meteo Weather API</a>
+        </p>
+        <p>資料時區：Asia/Taipei · 預報資料可能隨模型更新而變動</p>
+      </div>
+      <p id="pageUpdatedAt">頁面更新時間：--</p>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
